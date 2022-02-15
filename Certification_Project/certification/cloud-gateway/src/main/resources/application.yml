@@ -1,0 +1,21 @@
+
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: cloud_route
+          uri: lb://demo-cloud
+          predicates:
+          - Path=/api/demo/**
+          filters:
+            - RewritePath=/api/(?<segment>.*),/$\{segment}
+        - id: admin_route
+          uri: lb://renren-fast
+          predicates:
+            - Path=/api/**
+          filters:
+            - RewritePath=/api/(?<segment>.*),/renren-fast/$\{segment}
+  application:
+    name: cloud-gateway
+server:
+  port: 88
